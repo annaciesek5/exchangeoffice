@@ -12,7 +12,7 @@
 }
 
 .form__field {
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     padding: 5px;
     max-width: 200px;
     border-radius: 5px;
@@ -20,11 +20,11 @@
 }
 
 .form__field:required {
-    border: 1px solid hsl(208, 100%, 20%);
+    border: 1px solid hsla(208, 100%, 20%, 0.301);
 }
 
 .form__fieldset {
-    border: 1px solid #ccc;
+    border: 2px solid rgba(39, 38, 38, 0.37);
     padding: 5px;
     border-radius: 5px;
     margin: 10px 0;

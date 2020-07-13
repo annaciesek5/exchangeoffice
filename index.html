@@ -16,53 +16,55 @@
 </head>
 
 <body>
-    <form class="form">
-        <h1>Kantor wymiany walut</h1>
-        <fieldset class="form__fieldset">
-            <legend class="form__legend">Waluta</legend>
-            <p><label class="form__labelText">Wymiana z:*
-                    <select name="currencyType" class="form__field js-exchangeFrom">
-                        <option selected value="PLN">PLN - zł </option>
-                        <option value="USD">USD - $</option>
+    <div class="element">
+        <form class="form">
+            <h1>Kantor wymiany walut</h1>
+            <fieldset class="form__fieldset">
+                <legend class="form__legend">Waluta</legend>
+                <p><label class="form__labelText">Wymiana z:*
+                        <select name="currencyType" class="form__field js-exchangeFrom">
+                            <option selected value="PLN">PLN - zł </option>
+                            <option value="USD">USD - $</option>
+                            <option value="GBP">GBP - £</option>
+                        </select>
+                    </label></p>
+                <label class="form__labelText">Wymiana na:*
+                    <select name="currencyType" class="form__field js-exchangeTo">
+                        <option value="PLN">PLN - zł </option>
+                        <option selected value="USD">USD - $</option>
                         <option value="GBP">GBP - £</option>
                     </select>
                 </label></p>
-            <label class="form__labelText">Wymiana na:*
-                <select name="currencyType" class="form__field js-exchangeTo">
-                    <option value="PLN">PLN - zł </option>
-                    <option selected value="USD">USD - $</option>
-                    <option value="GBP">GBP - £</option>
-                </select>
-            </label></p>
-        </fieldset>
-        <fieldset class="form__fieldset">
-            <legend class="form__legend">Wymiana</legend>
-            <p><label class="form__labelText">Wybierz typ wymiany*
-                    <ul class="form_unorderedList">
-                        <li>
-                            <label class="form__labelText"><input type="radio" name="exchangeType" value="buying"
-                                    class="js-radioBuying" required checked>Zakup</label>
-                        </li>
-                        <li>
-                            <label class="form__labelText"><input type="radio" name="exchangeType" value="selling"
-                                    class="js-radioSelling">Sprzedaż</label>
-                        </li>
-                    </ul>
-                </label></p>
-            <p><label for="moneyToExchange" class="form__labelText">Kwota do wymiany*</label>
-                <input name="moneyToExchange" id="moneyToExchange" placeholder="Wpisz kwotę do wymiany" autofocus
-                    required type="number" min="0.01" step="0.01" autocomplete="on" class="form__field js-money">
-            </p>
-            <p><button class="form__button">Zamień</button></p>
+            </fieldset>
+            <fieldset class="form__fieldset">
+                <legend class="form__legend">Wymiana</legend>
+                <p><label class="form__labelText">Wybierz typ wymiany*
+                        <ul class="form_unorderedList">
+                            <li>
+                                <label class="form__labelText"><input type="radio" name="exchangeType" value="buying"
+                                        class="js-radioBuying" required checked>Zakup</label>
+                            </li>
+                            <li>
+                                <label class="form__labelText"><input type="radio" name="exchangeType" value="selling"
+                                        class="js-radioSelling">Sprzedaż</label>
+                            </li>
+                        </ul>
+                    </label></p>
+                <p><label for="moneyToExchange" class="form__labelText">Kwota do wymiany*</label>
+                    <input name="moneyToExchange" id="moneyToExchange" placeholder="Wpisz kwotę do wymiany" autofocus
+                        required type="number" min="0.01" step="0.01" autocomplete="on" class="form__field js-money">
+                </p>
+                <p><button class="form__button">Zamień</button></p>
 
-        </fieldset>
+            </fieldset>
 
-        <fieldset class="form__fieldset">
-            <legend class="form__legend">Waluta wymieniona</legend>
-            <p><label class="form__labelText"><strong class="js-resultMoney"></strong></p>
-        </fieldset>
-        <p>* - wymagane</p>
-    </form>
+            <fieldset class="form__fieldset">
+                <legend class="form__legend">Waluta wymieniona</legend>
+                <p><label class="form__labelText"><strong class="js-resultMoney"></strong></p>
+            </fieldset>
+            <p>* - wymagane</p>
+        </form>
+    </div>
 </body>
 
 </html>
