@@ -1,144 +1,106 @@
-let formElement = document.querySelector(".form");
-//exchange type
-let radioBuyingElement = document.querySelector(".js-radioBuying");
-let radioSellingElement = document.querySelector(".js-radioSelling");
-//exchange from/to which currency 
-let exchangeFromElement = document.querySelector(".js-exchangeFrom");
-let exchangeToElement = document.querySelector(".js-exchangeTo");
-//amount of money to exchange
-let moneyElement = document.querySelector(".js-money");
+{
+    const welcome = () => {
+        console.log("Witam wszystkich :)");
+    };
 
-let resultMoneyElement = document.querySelector(".js-resultMoney");
-
-formElement.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    let exchangeFrom = exchangeFromElement.value;
-    let exchangeTo = exchangeToElement.value;
-    let money = moneyElement.value;
-
-    let moneyExchanged;
-    let currencyFrom;
-    let currencyTo;
-
-    let PLUSDBuying = 3.9432;
-    let PLGBPBuying = 4.8851;
-    let USDPLBuying = 3.9728;
-    let USDGBPBuying = 0.8132;
-    let GBPPLBuying = 4.9283;
-    let GBPUSDBuying = 1.2487;
-
-    let PLUSDSelling = 3.9726;
-    let PLGBPSelling = 4.9241;
-    let USDPLSelling = 3.9432;
-    let USDGBPSelling = 0.8007;
-    let GBPPLSelling = 4.8851;
-    let GBPUSDSelling = 1.2296;
-
-    if (radioBuyingElement.checked) {
+    const moneyExchange = (exchangeFrom, exchangeTo, money, PLUSD, PLGBP, USDPL, USDGBP, GBPPL, GBPUSD) => {
         switch (exchangeFrom) {
             case "PLN":
                 switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = money;
+                    case "PLN": exchange(money, 1);
                         break;
-                    case "USD":
-                        moneyExchanged = (money / PLUSDBuying).toFixed(2);
+                    case "USD": exchange(money, PLUSD);
                         break;
-                    case "GBP":
-                        moneyExchanged = (money / PLGBPBuying).toFixed(2);
+                    case "GBP": exchange(money, PLGBP);
                         break;
                 }
                 break;
             case "USD":
                 switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = (money * USDPLBuying).toFixed(2);
+                    case "PLN": exchange(money, USDPL);
                         break;
-                    case "USD":
-                        moneyExchanged = money;
+                    case "USD": exchange(money, 1);
                         break;
-                    case "GBP":
-                        moneyExchanged = (money * USDGBPBuying).toFixed(2);
+                    case "GBP": exchange(money, USDGBP);
                         break;
                 }
                 break;
             case "GBP":
                 switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = (money * GBPPLBuying).toFixed(2);
+                    case "PLN": exchange(money, GBPPL);
                         break;
-                    case "USD":
-                        moneyExchanged = (money * GBPUSDBuying).toFixed(2);
+                    case "USD": exchange(money, GBPUSD);
                         break;
-                    case "GBP":
-                        moneyExchanged = money;
+                    case "GBP": exchange(money, 1);
                         break;
                 }
                 break;
         }
-    }
-    else if (radioSellingElement.checked) {
-        switch (exchangeFrom) {
-            case "PLN":
-                switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = money;
-                        break;
-                    case "USD":
-                        moneyExchanged = (money / PLUSDSelling).toFixed(2);
-                        break;
-                    case "GBP":
-                        moneyExchanged = (money / PLGBPSelling).toFixed(2);
-                        break;
-                }
-                break;
-            case "USD":
-                switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = (money * USDPLSelling).toFixed(2);
-                        break;
-                    case "USD":
-                        moneyExchanged = money;
-                        break;
-                    case "GBP":
-                        moneyExchanged = (money * USDGBPSelling).toFixed(2);
-                        break;
-                }
-                break;
-            case "GBP":
-                switch (exchangeTo) {
-                    case "PLN":
-                        moneyExchanged = (money * GBPPLSelling).toFixed(2);
-                        break;
-                    case "USD":
-                        moneyExchanged = (money * GBPUSDSelling).toFixed(2);
-                        break;
-                    case "GBP":
-                        moneyExchanged = money;
-                        break;
-                }
-                break;
+    };
 
+    const exchange = (money, exchangeRate) => {
+        return moneyExchanged = (money * exchangeRate).toFixed(2);
+    };
+
+    const currencyChoice = (exchange) => {
+        switch (exchange) {
+            case "PLN": return "zł";
+            case "USD": return "$";
+            case "GBP": return "£";
         }
-    }
+    };
 
-    switch (exchangeFrom) {
-        case "PLN": currencyFrom = "zł";
-            break;
-        case "USD": currencyFrom = "$";
-            break;
-        case "GBP": currencyFrom = "£";
-            break;
-    }
-    switch (exchangeTo) {
-        case "PLN": currencyTo = "zł";
-            break;
-        case "USD": currencyTo = "$";
-            break;
-        case "GBP": currencyTo = "£";
-            break;
-    }
-    let resultMessage = `Wymieniono ${money}${currencyFrom} na ${moneyExchanged}${currencyTo}`;
-    resultMoneyElement.innerHTML = resultMessage;
-})
+    const updateResultText = (money, moneyExchanged, exchangeFrom, exchangeTo) => {
+        const resultMoneyElement = document.querySelector(".js-resultMoney");
+        const resultMessage = `Wymieniono ${money}${currencyChoice(exchangeFrom)} na ${moneyExchanged}${currencyChoice(exchangeTo)}`;
+        resultMoneyElement.innerHTML = resultMessage;
+    };
+
+    const onFormSubmit = (event) => {
+        event.preventDefault();
+
+        //exchange type
+        const radioBuyingElement = document.querySelector(".js-radioBuying");
+        const radioSellingElement = document.querySelector(".js-radioSelling");
+        //exchange from/to which currency 
+        const exchangeFromElement = document.querySelector(".js-exchangeFrom");
+        const exchangeToElement = document.querySelector(".js-exchangeTo");
+        //amount of money to exchange
+        const moneyElement = document.querySelector(".js-money");
+
+        const exchangeFrom = exchangeFromElement.value;
+        const exchangeTo = exchangeToElement.value;
+        const money = +moneyElement.value;
+
+        const PLUSDBuying = 0.2536;
+        const PLGBPBuying = 0.2031;
+        const USDPLBuying = 3.9728;
+        const USDGBPBuying = 0.8132;
+        const GBPPLBuying = 4.9283;
+        const GBPUSDBuying = 1.2487;
+
+        const PLUSDSelling = 0.2517;
+        const PLGBPSelling = 0.2047;
+        const USDPLSelling = 3.9432;
+        const USDGBPSelling = 0.8007;
+        const GBPPLSelling = 4.8851;
+        const GBPUSDSelling = 1.2296;
+
+        if (radioBuyingElement.checked) {
+            const moneyExchanged = moneyExchange(exchangeFrom, exchangeTo, money, PLUSDBuying, PLGBPBuying, USDPLBuying, USDGBPBuying, GBPPLBuying, GBPUSDBuying);
+        }
+        else if (radioSellingElement.checked) {
+            const moneyExchanged = moneyExchange(exchangeFrom, exchangeTo, money, PLUSDSelling, PLGBPSelling, USDPLSelling, USDGBPSelling, GBPPLSelling, GBPUSDSelling);
+        }
+        updateResultText(money, moneyExchanged, exchangeFrom, exchangeTo);
+
+    };
+
+    const init = () => {
+        const formElement = document.querySelector(".form");
+        formElement.addEventListener("submit", onFormSubmit);
+    };
+
+    welcome();
+    init();
+}
