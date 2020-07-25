@@ -24,18 +24,18 @@
                     GBP: { PLN: GBPPLBuying }
                 }
             }
-            
+
             if (exchangeFrom === exchangeTo) {
-                rate = 1;
+                return money;
+            }
+
+            if (rates[activity][exchangeFrom][exchangeTo] !== undefined) {
+                rate = rates[activity][exchangeFrom][exchangeTo];
             }
             else {
-                if (rates[activity][exchangeFrom][exchangeTo]!==undefined) {
-                    rate = rates[activity][exchangeFrom][exchangeTo];
-                }
-                else {
-                    rate = 1/rates[activity][exchangeTo][exchangeFrom];
-                }
+                rate = 1 / rates[activity][exchangeTo][exchangeFrom];
             }
+
             return exchange(money, rate);
         }
         catch (err) {
