@@ -6,64 +6,39 @@
     const moneyExchange = (exchangeFrom, exchangeTo, money, activity) => {
         try {
             const PLUSDBuying = 0.2536;
-            const PLGBPBuying = 0.2031;
-            const USDPLBuying = 3.9728;
             const USDGBPBuying = 0.8132;
             const GBPPLBuying = 4.9283;
-            const GBPUSDBuying = 1.2487;
             const PLUSDSelling = 0.2517;
-            const PLGBPSelling = 0.2047;
-            const USDPLSelling = 3.9432;
             const USDGBPSelling = 0.8007;
             const GBPPLSelling = 4.8851;
-            const GBPUSDSelling = 1.2296;
 
             const rates = {
                 false: {
-                    PLN:
-                    {
-                        PLN: 1,
-                        USD: PLUSDSelling,
-                        GBP: PLGBPSelling
-                    },
-                    USD:
-                    {
-                        PLN: USDPLSelling,
-                        USD: 1,
-                        GBP: USDGBPSelling
-                    },
-                    GBP:
-                    {
-                        PLN: GBPPLSelling,
-                        USD: GBPUSDSelling,
-                        GBP: 1
-                    }
+                    PLN: { USD: PLUSDSelling },
+                    USD: { GBP: USDGBPSelling },
+                    GBP: { PLN: GBPPLSelling }
                 },
                 true: {
-                    PLN:
-                    {
-                        PLN: 1,
-                        USD: PLUSDBuying,
-                        GBP: PLGBPBuying
-                    },
-                    USD:
-                    {
-                        PLN: USDPLBuying,
-                        USD: 1,
-                        GBP: USDGBPBuying
-                    },
-                    GBP:
-                    {
-                        PLN: GBPPLBuying,
-                        USD: GBPUSDBuying,
-                        GBP: 1
-                    }
+                    PLN: { USD: PLUSDBuying },
+                    USD: { GBP: USDGBPBuying },
+                    GBP: { PLN: GBPPLBuying }
                 }
             }
-            rate = rates[activity][exchangeFrom][exchangeTo];
+            
+            if (exchangeFrom === exchangeTo) {
+                rate = 1;
+            }
+            else {
+                if (rates[activity][exchangeFrom][exchangeTo]!==undefined) {
+                    rate = rates[activity][exchangeFrom][exchangeTo];
+                }
+                else {
+                    rate = 1/rates[activity][exchangeTo][exchangeFrom];
+                }
+            }
             return exchange(money, rate);
         }
-        catch (err){
+        catch (err) {
             console.log("Indeks nie istnieje");
         }
     };
