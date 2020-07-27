@@ -12,9 +12,9 @@
             if (rates[activity][exchangeFrom][exchangeTo] !== undefined) {
                 rate = rates[activity][exchangeFrom][exchangeTo];
             }
-            else {
-                rate = 1 / rates[activity][exchangeTo][exchangeFrom];
-            }
+            // else {
+            //     rate = 1 / rates[activity][exchangeTo][exchangeFrom];
+            // }
             return exchange(money, rate);
         }
         catch (err) {
@@ -32,21 +32,57 @@
 
         const rates = {
             selling: {
-                PLN: { USD: PLUSDSelling },
-                USD: { GBP: USDGBPSelling },
-                GBP: { PLN: GBPPLSelling }
+                PLN: {
+                    USD: getAPIRate("USD", "ask"),
+                    GBP: getAPIRate("GBP", "ask"),
+                },
+                USD: { 
+                    PLN: 1/getAPIRate("USD", "bid"),
+                    GBP: USDGBPSelling,
+                },
+                GBP: {
+                    PLN: 1/getAPIRate("GBP", "bid"),
+                    USD: USDGBPSelling,
+                },
             },
             buying: {
-                PLN: { USD: PLUSDBuying },
-                USD: { GBP: USDGBPBuying },
-                GBP: { PLN: GBPPLBuying }
+                PLN: {
+                    USD: getAPIRate("USD", "ask"),
+                    GBP: getAPIRate("GBP", "ask"),
+                },
+                USD: { 
+                    PLN: 1/getAPIRate("USD", "bid"),
+                    GBP: USDGBPSelling,
+                },
+                GBP: {
+                    PLN: 1/getAPIRate("GBP", "bid"),
+                    USD: USDGBPSelling,
+                },
             }
         }
         return rates;
     };
 
+    
+    const getAPIRate = (rate, activity) => {
+        let url = `https://api.nbp.pl/api/exchangerates/rates/c/${rate}/`
+        let request = null;
+        request = new XMLHttpRequest();
+        request.open("GET", url, false);
+        request.send(null);
+        const obj = JSON.parse(request.responseText);
+        const bid = obj.rates[0].bid;
+        const ask = obj.rates[0].ask;
+        if (activity === "ask") {
+            return ask;
+        }
+        if (activity === "bid") {
+            return bid;
+        }
+    };
+
     const exchange = (money, exchangeRate) => {
-        return moneyExchanged = (money * exchangeRate).toFixed(2);
+        return moneyExchanged = (money / exchangeRate).toFixed(2);
     };
 
     const currencyChoice = (exchange) => {
