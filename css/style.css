@@ -2,17 +2,13 @@ html {
     box-sizing: border-box;
     font-family: "Lato", sans-serif;
     font-size: 15px;
-}
-
-*, ::after, ::before {
-    box-sizing: inherit;
-}
-
-.element{
     background-image: url("../images/background.png");
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: cover;
     background-attachment: fixed;
-    
+}
+
+*, ::after, ::before {
+    box-sizing: inherit;
 }

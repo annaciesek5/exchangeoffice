@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="element">
+    <div>
         <form class="form">
             <h1>Kantor wymiany walut</h1>
             <fieldset class="form__fieldset">
@@ -38,18 +38,6 @@
             </fieldset>
             <fieldset class="form__fieldset">
                 <legend class="form__legend">Wymiana</legend>
-                <p><label class="form__labelText">Wybierz typ wymiany*
-                        <ul class="form_unorderedList">
-                            <li>
-                                <label class="form__labelText"><input type="radio" name="exchangeType" value="buying"
-                                        class="js-radioBuying" required checked>Zakup</label>
-                            </li>
-                            <li>
-                                <label class="form__labelText"><input type="radio" name="exchangeType" value="selling"
-                                        class="js-radioSelling">Sprzedaż</label>
-                            </li>
-                        </ul>
-                    </label></p>
                 <p><label for="moneyToExchange" class="form__labelText">Kwota do wymiany*</label>
                     <input name="moneyToExchange" id="moneyToExchange" placeholder="Wpisz kwotę do wymiany" autofocus
                         required type="number" min="0.01" step="0.01" autocomplete="on" class="form__field js-money">

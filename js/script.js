@@ -3,19 +3,33 @@
         console.log("Witam wszystkich :)");
     };
 
-    const moneyExchange = (exchangeFrom, exchangeTo, money, activity) => {
+    const moneyExchange = (exchangeFrom, exchangeTo, money) => {
         if (exchangeFrom === exchangeTo) {
             return money;
         }
         try {
             const rates = getRates();
-            if (rates[activity][exchangeFrom][exchangeTo] !== undefined) {
-                rate = rates[activity][exchangeFrom][exchangeTo];
+            if (exchangeFrom == "PLN"){
+                rate = rates["ask"][exchangeTo];
+                return exchange(money, rate);
             }
-            // else {
-            //     rate = 1 / rates[activity][exchangeTo][exchangeFrom];
+            if (exchangeTo =="PLN"){
+                rate = rates["bid"][exchangeFrom];
+                return exchange(money, rate);
+            }
+            else{
+                rate1 = rates["bid"][exchangeFrom];
+                rate2 = rates["ask"][exchangeTo];
+                let tempExchange = exchange(money, rate1);
+                return exchange(tempExchange, rate2);
+            }
+            // if (rates[activity][exchangeFrom][exchangeTo] !== undefined) {
+            //     rate = rates[activity][exchangeFrom][exchangeTo];
             // }
-            return exchange(money, rate);
+            // else {
+            //     rate = rates[activity][exchangeTo][exchangeFrom];
+            // }
+            //return exchange(money, rate);
         }
         catch (err) {
             console.log("Indeks nie istnieje");
@@ -23,47 +37,38 @@
     };
 
     const getRates = () => {
-        const PLUSDBuying = 0.2536;
-        const USDGBPBuying = 0.8132;
-        const GBPPLBuying = 4.9283;
-        const PLUSDSelling = 0.2517;
-        const USDGBPSelling = 0.8007;
-        const GBPPLSelling = 4.8851;
+        let rates = {
+            ask: { USD: {}, GBP: {} } ,
+            bid: { USD: {}, GBP: {} } 
+        };
 
-        const rates = {
-            selling: {
-                PLN: {
-                    USD: getAPIRate("USD", "ask"),
-                    GBP: getAPIRate("GBP", "ask"),
-                },
-                USD: { 
-                    PLN: 1/getAPIRate("USD", "bid"),
-                    GBP: USDGBPSelling,
-                },
-                GBP: {
-                    PLN: 1/getAPIRate("GBP", "bid"),
-                    USD: USDGBPSelling,
-                },
-            },
-            buying: {
-                PLN: {
-                    USD: getAPIRate("USD", "ask"),
-                    GBP: getAPIRate("GBP", "ask"),
-                },
-                USD: { 
-                    PLN: 1/getAPIRate("USD", "bid"),
-                    GBP: USDGBPSelling,
-                },
-                GBP: {
-                    PLN: 1/getAPIRate("GBP", "bid"),
-                    USD: USDGBPSelling,
-                },
-            }
-        }
+        // let rates = {
+        //     ask: {},
+        //     bid: {}
+        // }
+        //const currencies = ["USD", "GBP"];
+
+
+        // for (let curr in currencies) {
+        //     rates["ask"][curr] = getAPIRate(curr, "ask");
+        //     rates["bid"][curr] = getAPIRate(curr, "bid");
+        //     console.log(rates);
+        // };
+
+        // for (let i = 0; i++; currencies.length - 1) {
+        //     rates["ask"]["PLN"][currencies[i]] = getAPIRate(currencies[i], "ask");
+        //     rates["bid"]["PLN"][currencies[i]] = getAPIRate(currencies[i], "bid");
+        //     console.log(rates);
+        // };
+
+        rates["ask"]["USD"] = getAPIRate("USD", "ask");
+        rates["bid"]["USD"] = getAPIRate("USD", "bid");
+        rates["ask"]["GBP"] = getAPIRate("GBP", "ask");
+        rates["bid"]["GBP"] = getAPIRate("GBP", "bid");
         return rates;
     };
 
-    
+
     const getAPIRate = (rate, activity) => {
         let url = `https://api.nbp.pl/api/exchangerates/rates/c/${rate}/`
         let request = null;
@@ -74,7 +79,7 @@
         const bid = obj.rates[0].bid;
         const ask = obj.rates[0].ask;
         if (activity === "ask") {
-            return ask;
+            return 1/ask;
         }
         if (activity === "bid") {
             return bid;
@@ -82,7 +87,7 @@
     };
 
     const exchange = (money, exchangeRate) => {
-        return moneyExchanged = (money / exchangeRate).toFixed(2);
+        return moneyExchanged = ((money * exchangeRate) * 0.97).toFixed(2);
     };
 
     const currencyChoice = (exchange) => {
@@ -102,9 +107,6 @@
     const onFormSubmit = (event) => {
         event.preventDefault();
 
-        //activity type
-        const radioBuyingElement = document.querySelector(".js-radioBuying");
-        const radioSellingElement = document.querySelector(".js-radioSelling");
         //exchange from/to which currency 
         const exchangeFromElement = document.querySelector(".js-exchangeFrom");
         const exchangeToElement = document.querySelector(".js-exchangeTo");
@@ -114,16 +116,8 @@
         const exchangeFrom = exchangeFromElement.value;
         const exchangeTo = exchangeToElement.value;
         const money = +moneyElement.value;
-        let activity;
-
-        if (radioBuyingElement.checked) {
-            activity = "buying";
-        }
-        if (radioSellingElement.checked) {
-            activity = "selling";
-        }
-
-        const moneyExchanged = moneyExchange(exchangeFrom, exchangeTo, money, activity);
+       
+        const moneyExchanged = moneyExchange(exchangeFrom, exchangeTo, money);
         updateResultText(money, moneyExchanged, exchangeFrom, exchangeTo);
     };
 
