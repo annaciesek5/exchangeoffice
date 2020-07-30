@@ -9,80 +9,57 @@
         }
         try {
             const rates = getRates();
-            if (exchangeFrom == "PLN"){
-                rate = rates["ask"][exchangeTo];
+            if (exchangeFrom == "PLN") {
+                rate = rates[exchangeTo]["ask"];
                 return exchange(money, rate);
             }
-            if (exchangeTo =="PLN"){
-                rate = rates["bid"][exchangeFrom];
+            if (exchangeTo == "PLN") {
+                rate = rates[exchangeFrom]["bid"];
                 return exchange(money, rate);
             }
-            else{
-                rate1 = rates["bid"][exchangeFrom];
-                rate2 = rates["ask"][exchangeTo];
-                let tempExchange = exchange(money, rate1);
-                return exchange(tempExchange, rate2);
-            }
-            // if (rates[activity][exchangeFrom][exchangeTo] !== undefined) {
-            //     rate = rates[activity][exchangeFrom][exchangeTo];
-            // }
-            // else {
-            //     rate = rates[activity][exchangeTo][exchangeFrom];
-            // }
-            //return exchange(money, rate);
+            rate1 = rates[exchangeFrom]["bid"];
+            rate2 = rates[exchangeTo]["ask"];
+            let texchangedFromToPLN = exchange(money, rate1);
+            return exchange(texchangedFromToPLN, rate2);
         }
         catch (err) {
-            console.log("Indeks nie istnieje");
+            console.log("Rate doesn't exits in table");
         }
     };
 
     const getRates = () => {
         let rates = {
-            ask: { USD: {}, GBP: {} } ,
-            bid: { USD: {}, GBP: {} } 
+            USD: {},
+            GBP: {}
         };
+        const currencies = ["USD", "GBP"];
 
-        // let rates = {
-        //     ask: {},
-        //     bid: {}
-        // }
-        //const currencies = ["USD", "GBP"];
+        for (let i = 0; currencies.length; i++) {
+            rates[currencies[i]] = getAPIRate(currencies[i]);
+            console.log(rates);
+        }
 
-
-        // for (let curr in currencies) {
-        //     rates["ask"][curr] = getAPIRate(curr, "ask");
-        //     rates["bid"][curr] = getAPIRate(curr, "bid");
-        //     console.log(rates);
-        // };
-
-        // for (let i = 0; i++; currencies.length - 1) {
-        //     rates["ask"]["PLN"][currencies[i]] = getAPIRate(currencies[i], "ask");
-        //     rates["bid"]["PLN"][currencies[i]] = getAPIRate(currencies[i], "bid");
-        //     console.log(rates);
-        // };
-
-        rates["ask"]["USD"] = getAPIRate("USD", "ask");
-        rates["bid"]["USD"] = getAPIRate("USD", "bid");
-        rates["ask"]["GBP"] = getAPIRate("GBP", "ask");
-        rates["bid"]["GBP"] = getAPIRate("GBP", "bid");
+        // rates["USD"] = getAPIRate("USD");
+        // rates["GBP"] = getAPIRate("GBP");
         return rates;
     };
 
 
-    const getAPIRate = (rate, activity) => {
-        let url = `https://api.nbp.pl/api/exchangerates/rates/c/${rate}/`
-        let request = null;
-        request = new XMLHttpRequest();
-        request.open("GET", url, false);
-        request.send(null);
-        const obj = JSON.parse(request.responseText);
-        const bid = obj.rates[0].bid;
-        const ask = obj.rates[0].ask;
-        if (activity === "ask") {
-            return 1/ask;
+    const getAPIRate = (rate) => {
+        try {
+            let url = `https://api.nbp.pl/api/exchangerates/rates/c/${rate}/`;
+            let request = null;
+            request = new XMLHttpRequest();
+            request.open("GET", url, false);
+            //request.setRequestHeader('Access-Control-Allow-Origin','*');
+            request.send(null);
+            const obj = JSON.parse(request.responseText);
+            const bid = obj.rates[0].bid;
+            const ask = obj.rates[0].ask;
+            return { ask, bid };
         }
-        if (activity === "bid") {
-            return bid;
+        catch (err) {
+            console.log("Data from API hadn't been downloaded.");
         }
     };
 
@@ -91,11 +68,12 @@
     };
 
     const currencyChoice = (exchange) => {
-        switch (exchange) {
-            case "PLN": return "zł";
-            case "USD": return "$";
-            case "GBP": return "£";
-        }
+        currency = {
+            PLN: "zł",
+            USD: "$",
+            GBP: "£"
+        };
+        return currency[exchange];
     };
 
     const updateResultText = (money, moneyExchanged, exchangeFrom, exchangeTo) => {
@@ -116,7 +94,7 @@
         const exchangeFrom = exchangeFromElement.value;
         const exchangeTo = exchangeToElement.value;
         const money = +moneyElement.value;
-       
+
         const moneyExchanged = moneyExchange(exchangeFrom, exchangeTo, money);
         updateResultText(money, moneyExchanged, exchangeFrom, exchangeTo);
     };
