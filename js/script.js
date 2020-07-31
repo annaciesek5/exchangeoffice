@@ -11,16 +11,16 @@
             const rates = getRates();
             if (exchangeFrom == "PLN") {
                 rate = rates[exchangeTo]["ask"];
-                return exchange(money, rate);
+                return exchange(money, rate, "ask");
             }
             if (exchangeTo == "PLN") {
                 rate = rates[exchangeFrom]["bid"];
-                return exchange(money, rate);
+                return exchange(money, rate, "bid");
             }
             rate1 = rates[exchangeFrom]["bid"];
             rate2 = rates[exchangeTo]["ask"];
-            let exchangedFromToPLN = exchange(money, rate1);
-            return exchange(exchangedFromToPLN, rate2);
+            let exchangedFromToPLN = exchange(money, rate1, "bid");
+            return exchange(exchangedFromToPLN, rate2, "ask");
         }
         catch (err) {
             console.log("Rate doesn't exits in table");
@@ -51,7 +51,7 @@
             request.send(null);
             const obj = JSON.parse(request.responseText);
             const bid = obj.rates[0].bid;
-            const ask = 1/obj.rates[0].ask;
+            const ask = obj.rates[0].ask;
             return { ask, bid };
         }
         catch (err) {
@@ -59,9 +59,15 @@
         }
     };
 
-    const exchange = (money, exchangeRate) => {
-        const margin = 0.03;
-        return moneyExchanged = ((money * exchangeRate) * (1-margin)).toFixed(2);
+    const exchange = (money, rate, activity) => {
+        const margin = 3;
+        if (activity=="ask"){
+            exchangeRate = 1/rate;
+        }
+        else{
+            exchangeRate = rate;
+        }
+        return moneyExchanged = ((money * exchangeRate) * (100-margin)/100).toFixed(2);
     };
 
     const currencyChoice = (exchange) => {
